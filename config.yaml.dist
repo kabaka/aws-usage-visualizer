@@ -1,0 +1,9 @@
+# Your AWS remote access credentials
+
+:AWS:
+  :access_key_id: ''
+  :secret_access_key: ''
+
+# S3 bucket name (must already exist)
+
+:bucket: ''
