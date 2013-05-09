@@ -24,14 +24,23 @@ See `config.yaml.dist`. Create a `config.yaml` based on it.
 
 ### Basic Template
 
-Create a templates directory. In it, create a file called `html.erb`. In this
+Create a `templates` directory. In it, create a file called `html.erb`. In this
 file, you should use the following variables:
 
-* title - the page title, determined by the source file name
-* body - the page body, either rendered from markdown or directly copied from
+* `title` - the page title, determined by the source file name
+* `body` - the page body, either rendered from markdown or directly copied from
   a raw HTML file
 
 The `html.erb` file will be rendered as an `erb` template normally is.
+
+### Source Files
+
+Create a `source-files` directory. Inside that, you may have:
+
+* `static-assets` - assets copied as-is to /static-assets/ in the S3 bucket
+* `pages` - markdown or other files that are copied to the root of the S3
+  bucket. Markdown (`.md` or `.markdown`) files are rendered to HTML using
+  Kramdown.
 
 ### Rake
 
