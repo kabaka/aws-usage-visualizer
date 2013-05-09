@@ -31,6 +31,8 @@ Dir['source-files/static-assets/*'].each do |relative_path|
 end
 
 def create_html name, body
+  title = File.basename(name, '.html').split('-').map {|w| w.capitalize}.join ' '
+
   content = Templates.result 'html', binding
 
   create_file name, content
