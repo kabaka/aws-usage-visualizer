@@ -46,9 +46,9 @@ Create a `source-files` directory. Inside that, you may have:
 
 The tool is invoked by the `rake` utility.
 
-* rake - generate all content and upload to S3
-* rake regen - clear local cache and regenerate content without uploading
-* rake local:clean - clear local cache
-* rake local:generate - generate local cache
-* rake s3:upload - upload local cache to S3
+* `rake` - generate all content and upload to S3
+* `rake regen` - clear local cache and regenerate content without uploading
+* `rake local:clean` - clear local cache
+* `rake local:generate` - generate local cache
+* `rake s3:upload` - upload local cache to S3
 
