@@ -15,7 +15,7 @@ this has been tailored to my needs and nothing beyond them (as yet).
 ## Usage
 
 These instructions are somewhat disjointed and may be confusing. If you don't
-understand then, you are probably better off waiting for the tool to become
+understand them, you are probably better off waiting for the tool to become
 more mature.
 
 ### Configuration
