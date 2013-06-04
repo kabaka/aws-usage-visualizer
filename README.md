@@ -8,7 +8,7 @@ Generate formatted, graphical output from AWS usage statistics.
 
 1. Lower expectations. This barely does anything, yet.
 2. Create `config.yaml` based on `config.yaml.dist`.
-3. `rake s3:fetch`
+3. `rake` (or use a rake task depending on your needs -- see `rake -T`).
 
 *Better instructions coming soon.*
 
