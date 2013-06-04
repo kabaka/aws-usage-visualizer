@@ -10,25 +10,7 @@ include AWS
 load 'lib/templates.rb'
 load 'lib/config.rb'
 
-def create_html name, body
-  title = File.basename(name, '.html').split('-').map {|w| w.capitalize}.join ' '
-
-  content = Templates.result 'html', binding
-
-  create_file name, content
-end
-
-def create_file name, content
-  @renamed.each do |original, new|
-    content.gsub! original, new
-  end
-
-  File.open("output/#{name}", 'w') { |f| f.puts content }
-end
-
-
 output_dir = File.join(__dir__, '../output')
-
 FileUtils.mkdir_p output_dir
 
 
