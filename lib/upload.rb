@@ -5,22 +5,19 @@ include AWS
 
 load 'lib/config.rb'
 
-print 'Connecting to S3...'
-
 s3 = S3.new $conf[:AWS]
-
-puts ' Done'
 
 print 'Getting bucket info...'
 
-bucket = s3.buckets[$conf[:bucket]]
+bucket = s3.buckets[$conf[:upload_bucket]]
 
 unless bucket.exists?
   puts ' Failed'
-  abort "bucket #{$conf[:bucket]} does not exist"
+  abort "bucket #{$conf[:upload_bucket]} does not exist"
 end
 
 puts ' Done'
+
 
 puts 'Processing files...'
 

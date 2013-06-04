@@ -6,4 +6,9 @@
 
 # S3 bucket that contains billing data.
 
-:bucket: ''
+:source_bucket: ''
+
+# S3 bucket into which resulting output should be uploaded.
+
+:upload_bucket: ''
+

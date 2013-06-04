@@ -19,11 +19,11 @@ s3 = S3.new $conf[:AWS]
 
 print 'Getting bucket info...'
 
-bucket = s3.buckets[$conf[:bucket]]
+bucket = s3.buckets[$conf[:source_bucket]]
 
 unless bucket.exists?
   puts ' Failed'
-  abort "bucket #{$conf[:bucket]} does not exist"
+  abort "bucket #{$conf[:source_bucket]} does not exist"
 end
 
 puts ' Done'
@@ -84,12 +84,16 @@ bucket.objects.each do |object|
   puts "    - Generating output..."
 
   data.each do |product_name, product_data|
+    next unless product_name # XXX
+
     my_output_dir = File.join(output_dir, match[:date])
     FileUtils.mkdir_p my_output_dir
 
     output = Templates.result 'product', binding
 
-    File.open File.join(my_output_dir, "#{product_name}.html") , 'w'do |f|
+    file_name = product_name.tr_s '^a-zA-Z0-9', '-'
+
+    File.open File.join(my_output_dir, "#{file_name}.html") , 'w'do |f|
       f.puts output
     end
   end
