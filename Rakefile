@@ -1,5 +1,5 @@
-task :default => ['local:clean', 'local:generate', 's3:upload']
-task :regen   => ['local:clean', 'local:generate']
+task :default => ['local:clean', 's3:fetch', 's3:upload']
+task :regen   => ['local:clean', 's3:fetch']
 
 load 'lib/config.rb'
 load 'lib/templates.rb'
@@ -9,11 +9,6 @@ task :test do
 end
 
 namespace :local do
-
-  desc 'Generate static files and prepare static assets.'
-  task :generate do
-    ruby 'lib/generate.rb'
-  end
 
   desc 'Delete cached files in the staging area.'
   task :clean do
@@ -27,6 +22,11 @@ namespace :s3 do
   desc 'Upload files in the output directory to S3.'
   task :upload do
     ruby 'lib/upload.rb'
+  end
+
+  desc 'Retrieve usage statistics and generate local output'
+  task :fetch do
+    ruby 'lib/fetch.rb'
   end
 
 end

@@ -1,4 +1,4 @@
 require 'yaml'
 
-$conf = YAML::load File.open 'config.yaml'
+$conf = YAML::load_file File.join(__dir__, '../config.yaml')
 

@@ -4,6 +4,6 @@
   :access_key_id: ''
   :secret_access_key: ''
 
-# S3 bucket name (must already exist)
+# S3 bucket that contains billing data.
 
 :bucket: ''

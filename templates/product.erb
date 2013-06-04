@@ -1,0 +1,41 @@
+<html style="background-color: #EEE;">
+  <head>
+    <title><%=product_name%> - <%=match[:date]%> | AWS Usage</title>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  </head>
+
+  <body style="width: 970px; margin: 10px auto;">
+    <% product_data.each do |product_name, operations| %>    
+
+      <h1><%=product_name%></h1>
+      <% operations.each do |operation_name, items| %>
+
+        <h2><%=operation_name%></h2>
+        <% items.each do |item_name, hours| %>
+          <% div_name = "#{product_name}_#{operation_name}_#{item_name}".tr_s '^a-zA-Z', '_' %>
+
+          <div id="chart_div_<%=div_name%>" style="width: 95%; height: 600px;"></div>
+
+          <script type="text/javascript">
+            google.load("visualization", "1", {packages:["corechart"]});
+            google.setOnLoadCallback(drawChart);
+            function drawChart() {
+              var data = google.visualization.arrayToDataTable([
+                  ['Time', 'Usage'],
+                  <% hours.each do |start_date, hourly_data| %>
+                    ['<%=start_date%>', <%=hourly_data[0]%>],
+                  <% end %>
+                  ]);
+
+              var options = { title: '<%=item_name%>' };
+
+              var chart = new google.visualization.LineChart(document.getElementById('chart_div_<%=div_name%>'));
+              chart.draw(data, options);
+            }
+</script>
+          <% end %>
+        </table>
+      <% end %>
+    <% end %>
+  </body>
+</html>
