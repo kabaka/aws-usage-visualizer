@@ -84,12 +84,14 @@ bucket.objects.each do |object|
   puts "    - Generating output..."
 
   data.each do |product_name, product_data|
-    next unless product_name # XXX
+    # XXX: this is hax
+    next unless product_name
+    next if product_name == 'ProductName'
 
     my_output_dir = File.join(output_dir, match[:date])
     FileUtils.mkdir_p my_output_dir
 
-    output = Templates.result 'product', binding
+    output = Templates.result 'product_combined', binding
 
     file_name = product_name.tr_s '^a-zA-Z0-9', '-'
 
