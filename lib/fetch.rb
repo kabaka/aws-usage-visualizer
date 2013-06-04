@@ -88,6 +88,8 @@ bucket.objects.each do |object|
     next unless product_name
     next if product_name == 'ProductName'
 
+    product_data.reject! {|k, v| k.nil?}
+
     my_output_dir = File.join(output_dir, match[:date])
     FileUtils.mkdir_p my_output_dir
 
