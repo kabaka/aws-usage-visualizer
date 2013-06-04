@@ -9,33 +9,44 @@
 
       <h1><%=product_name%></h1>
       <% operations.each do |operation_name, items| %>
+        <%
+          graph_header = ['Time']
+          graph_data   = {}
 
-        <h2><%=operation_name%></h2>
+          div_name = "#{product_name}_#{operation_name}".tr_s '^a-zA-Z', '_'
+        %>
+
+        <div id="chart_div_<%=div_name%>" style="width: 95%; height: 600px;"></div>
+
         <% items.each do |item_name, hours| %>
-          <% div_name = "#{product_name}_#{operation_name}_#{item_name}".tr_s '^a-zA-Z', '_' %>
+          <%
+            graph_header << item_name
+            hours.each do |start_date, hourly_data|
+              graph_data[start_date] ||= []
+              graph_data[start_date] << hourly_data[0]
+            end
+          %>
+        <% end %>
 
-          <div id="chart_div_<%=div_name%>" style="width: 95%; height: 600px;"></div>
+        <script type="text/javascript">
+          google.load("visualization", "1", {packages:["corechart"]});
+          google.setOnLoadCallback(drawChart);
+          function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                [<%= graph_header.map {|h| "'#{h}'"}.join(',')%>],
+                <% graph_data.each do |start_date, hourly_data| %>
+                  ['<%=start_date%>', <%=hourly_data.join(',')%>],
+                <% end %>
+                ]);
 
-          <script type="text/javascript">
-            google.load("visualization", "1", {packages:["corechart"]});
-            google.setOnLoadCallback(drawChart);
-            function drawChart() {
-              var data = google.visualization.arrayToDataTable([
-                  ['Time', 'Usage'],
-                  <% hours.each do |start_date, hourly_data| %>
-                    ['<%=start_date%>', <%=hourly_data[0]%>],
-                  <% end %>
-                  ]);
+            var options = { title: '<%=operation_name%>' };
 
-              var options = { title: '<%=item_name%>' };
-
-              var chart = new google.visualization.LineChart(document.getElementById('chart_div_<%=div_name%>'));
-              chart.draw(data, options);
-            }
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div_<%=div_name%>'));
+            chart.draw(data, options);
+          }
 </script>
-          <% end %>
-        </table>
-      <% end %>
+      </table>
     <% end %>
-  </body>
+  <% end %>
+</body>
 </html>
