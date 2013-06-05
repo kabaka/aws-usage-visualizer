@@ -1,52 +1,43 @@
-<html style="background-color: #EEE;">
-  <head>
-    <title><%=product_name%> - <%=match[:date]%> | AWS Usage</title>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-  </head>
+<% product_data.each do |product_name, operations| %>    
 
-  <body style="width: 970px; margin: 10px auto;">
-    <% product_data.each do |product_name, operations| %>    
+  <h1><%=product_name%></h1>
+  <% operations.each do |operation_name, items| %>
+    <%
+      graph_header = ['Time']
+      graph_data   = {}
 
-      <h1><%=product_name%></h1>
-      <% operations.each do |operation_name, items| %>
-        <%
-          graph_header = ['Time']
-          graph_data   = {}
+      div_name = "#{product_name}_#{operation_name}".tr_s '^a-zA-Z', '_'
+    %>
 
-          div_name = "#{product_name}_#{operation_name}".tr_s '^a-zA-Z', '_'
-        %>
+    <div id="chart_div_<%=div_name%>" style="width: 95%; height: 600px;"></div>
 
-        <div id="chart_div_<%=div_name%>" style="width: 95%; height: 600px;"></div>
-
-        <% items.each do |item_name, hours| %>
-          <%
-            graph_header << item_name
-            hours.each do |start_date, hourly_data|
-              graph_data[start_date] ||= []
-              graph_data[start_date] << hourly_data[0]
-            end
-          %>
-        <% end %>
-
-        <script type="text/javascript">
-          google.load("visualization", "1", {packages:["corechart"]});
-          google.setOnLoadCallback(drawChart);
-          function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                [<%= graph_header.map {|h| "'#{h}'"}.join(',')%>],
-                <% graph_data.each do |start_date, hourly_data| %>
-                  ['<%=start_date%>', <%=hourly_data.join(',')%>],
-                <% end %>
-                ]);
-
-            var options = { title: '<%=operation_name%>' };
-
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div_<%=div_name%>'));
-            chart.draw(data, options);
-          }
-</script>
-      </table>
+    <% items.each do |item_name, hours| %>
+      <%
+        graph_header << item_name
+        hours.each do |start_date, hourly_data|
+          graph_data[start_date] ||= []
+          graph_data[start_date] << hourly_data[0]
+        end
+      %>
     <% end %>
+
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            [<%= graph_header.map {|h| "'#{h}'"}.join(',')%>],
+            <% graph_data.each do |start_date, hourly_data| %>
+              ['<%=start_date%>', <%=hourly_data.join(',')%>],
+            <% end %>
+            ]);
+
+        var options = { title: '<%=operation_name%>' };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div_<%=div_name%>'));
+        chart.draw(data, options);
+      }
+    </script>
   <% end %>
-</body>
-</html>
+<% end %>
+

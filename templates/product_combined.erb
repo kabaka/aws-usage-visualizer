@@ -1,54 +1,45 @@
-<html style="background-color: #EEE;">
-  <head>
-    <title><%=product_name%> - <%=match[:date]%> | AWS Usage</title>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-  </head>
+<% product_data.each do |product_name, operations| %>    
+  <%
+    graph_header = ['Time']
+    graph_data   = {}
+    title        = nil
 
-  <body style="width: 970px; margin: 10px auto;">
-    <% product_data.each do |product_name, operations| %>    
-      <%
-        graph_header = ['Time']
-        graph_data   = {}
-        title        = nil
+    div_name = product_name.tr_s '^a-zA-Z0-9', '_'
+  %>
 
-        div_name = product_name.tr_s '^a-zA-Z0-9', '_'
-      %>
+  <h1><%=product_name%></h1>
+  <div id="chart_div_<%=div_name%>" style="width: 95%; height: 600px;"></div>
+  <%
+    operations.each_with_index do |(operation_name, items), pos|
+    graph_header << operation_name
 
-      <h1><%=product_name%></h1>
-      <div id="chart_div_<%=div_name%>" style="width: 95%; height: 600px;"></div>
-      <%
-        operations.each_with_index do |(operation_name, items), pos|
-        graph_header << operation_name
+    items.each do |item_name, hours|
+      title = "#{product_name} (#{item_name})" unless title
 
-        items.each do |item_name, hours|
-          title = "#{product_name} (#{item_name})" unless title
+      hours.each do |start_date, hourly_data|
+        graph_data[start_date]    ||= Array.new operations.length, 0
+        graph_data[start_date][pos] = hourly_data[0]
+      end
 
-          hours.each do |start_date, hourly_data|
-            graph_data[start_date]    ||= Array.new operations.length, 0
-            graph_data[start_date][pos] = hourly_data[0]
-          end
+    end
 
-        end
+    end
+  %>
+  <script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+          [<%= graph_header.map {|h| "'#{h}'"}.join(',')%>],
+          <% graph_data.each_with_index do |(start_date, hourly_data), i| %>
+            ['<%=start_date%>',<%=hourly_data.join(',')%>]<%="," unless i == graph_data.length - 1%>
+          <% end %>
+          ]);
 
-        end
-      %>
-      <script type="text/javascript">
-        google.load("visualization", "1", {packages:["corechart"]});
-        google.setOnLoadCallback(drawChart);
-        function drawChart() {
-          var data = google.visualization.arrayToDataTable([
-              [<%= graph_header.map {|h| "'#{h}'"}.join(',')%>],
-              <% graph_data.each_with_index do |(start_date, hourly_data), i| %>
-                ['<%=start_date%>',<%=hourly_data.join(',')%>]<%="," unless i == graph_data.length - 1%>
-              <% end %>
-              ]);
+      var options = { title: '<%=title%>' };
 
-          var options = { title: '<%=title%>' };
-
-          var chart = new google.visualization.LineChart(document.getElementById('chart_div_<%=div_name%>'));
-          chart.draw(data, options);
-        }
-</script>
-    <% end %>
-  </body>
-</html>
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div_<%=div_name%>'));
+      chart.draw(data, options);
+    }
+  </script>
+<% end %>

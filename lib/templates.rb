@@ -19,15 +19,17 @@ module Templates
   end
 
   def self.result name, b = TOPLEVEL_BINDING
-    result = @@templates[name].template.result b
+    header = @@templates['header'].template.result b
+    result = @@templates[name].template.result     b
+    footer = @@templates['footer'].template.result b
 
     case @@templates[name].type
     when :md, :markdown
       body = Kramdown::Document.new(result).to_html
 
-      return @@templates['html'].template.result binding
+      result = @@templates['html'].template.result binding
     end
 
-    result
+    "#{header}#{result}#{footer}"
   end
 end
