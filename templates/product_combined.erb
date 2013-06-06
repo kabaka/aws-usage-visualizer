@@ -8,7 +8,7 @@
     div_name = product_name.tr_s '^a-zA-Z0-9', '_'
   %>
 
-  <h1><%=product_name%></h1>
+  <h1><a name="<%=product_name%>" href="#<%=product_name%>"><%=product_name%></a></h1>
   <div id="chart_div_<%=div_name%>" class="chart"></div>
   <%
     operations.each_with_index do |(operation_name, items), pos|
