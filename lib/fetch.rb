@@ -119,7 +119,7 @@ bucket.objects.each do |object|
 
     index_links[product_name] = [
       "#{file_name}.html",
-      "#{product_data.length} Products"
+      "#{product_data.length} Usage Categories"
     ]
   end
 
