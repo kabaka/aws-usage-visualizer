@@ -1,0 +1,17 @@
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% index_links.each do |title, (path, size)| %>
+      <tr>
+        <td><a href="<%=path%>"><%=title%></a></td>
+        <td><%=size%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

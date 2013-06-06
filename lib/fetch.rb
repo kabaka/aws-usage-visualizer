@@ -31,6 +31,8 @@ puts ' Done'
 
 puts 'Processing files...'
 
+main_index_links = {}
+
 bucket.objects.each do |object|
   match = object.key.match(
     /^(?<id>\d+)-aws-billing-detailed-line-items-(?<date>\d{4}-\d{2}).csv.zip$/
@@ -83,6 +85,15 @@ bucket.objects.each do |object|
   puts " Done"
   puts "    - Generating output..."
 
+  index_links = {}
+
+  index_links['..'] = [
+    "..", ''
+  ]
+
+  my_output_dir = File.join(output_dir, match[:date])
+  FileUtils.mkdir_p my_output_dir
+
   data.each do |product_name, product_data|
     # XXX: this is hax
     next unless product_name
@@ -90,18 +101,44 @@ bucket.objects.each do |object|
 
     product_data.reject! {|k, v| k.nil?}
 
-    my_output_dir = File.join(output_dir, match[:date])
-    FileUtils.mkdir_p my_output_dir
+    page_title = "#{product_name} - #{match[:date]}"
 
-    output = Templates.result 'product_combined', binding
+    template_output = Templates.result 'product_combined', binding
 
     file_name = product_name.tr_s '^a-zA-Z0-9', '-'
 
-    File.open File.join(my_output_dir, "#{file_name}.html") , 'w'do |f|
-      f.puts output
+    path = File.join my_output_dir, "#{file_name}.html"
+
+    File.open path, 'w' do |f|
+      f.puts template_output
     end
+
+    index_links[product_name] = [
+      "#{file_name}.html",
+      "#{product_data.length} Products"
+    ]
   end
+
+  page_title = "Index - #{match[:date]}"
+  template_output = Templates.result 'index', binding
+  
+  File.open File.join(my_output_dir, 'index.html'), 'w' do |f|
+    f.puts template_output
+  end
+
+  main_index_links[match[:date]] = [
+    "#{match[:date]}/",
+    "#{index_links.length} Products"
+  ]
 end
+
+index_links = main_index_links
+page_title = 'Index'
+
+File.open File.join(output_dir, 'index.html'), 'w' do |f|
+  f.puts Templates.result('index', binding)
+end
+
 
 puts 'Done'
 

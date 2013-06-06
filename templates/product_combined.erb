@@ -1,3 +1,4 @@
+<p><a href="../../">index</a>/<a href="./"><%=match[:date]%></a></p>
 <% product_data.each do |product_name, operations| %>    
   <%
     graph_header = ['Time']
@@ -8,7 +9,7 @@
   %>
 
   <h1><%=product_name%></h1>
-  <div id="chart_div_<%=div_name%>" style="width: 95%; height: 600px;"></div>
+  <div id="chart_div_<%=div_name%>" class="chart"></div>
   <%
     operations.each_with_index do |(operation_name, items), pos|
     graph_header << operation_name

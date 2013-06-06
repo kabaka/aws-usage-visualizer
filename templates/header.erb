@@ -1,7 +1,34 @@
-<html style="background-color: #EEE;">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html dir="ltr" lang="en-US" style="background-color: #DDD;">
   <head>
-    <title><%=product_name%> - <%=match[:date]%> | AWS Usage</title>
+    <title><%=page_title%> | AWS Usage</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <style type="text/css">
+      body {
+        background-color: #FFF;
+        width: 900px;
+        padding: 35px;
+        margin: 10px auto;
+        border-left: 1px dashed #AAA;
+        font-family: "sans";
+      }
+      table {
+        width: 95%;
+        margin: 10px auto;
+      }
+      thead {
+        border-bottom: 1px solid #AAA;
+      }
+
+      h1 {
+        text-align: center;
+      }
+      .chart {
+        width: 95%;
+        height: 600px;
+      }
+    </style>
   </head>
 
-  <body style="width: 970px; margin: 10px auto;">
+  <body>
