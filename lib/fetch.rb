@@ -40,6 +40,10 @@ bucket.objects.each do |object|
 
   next unless match
 
+  if ENV['date'] and not match[:date] == ENV['date']
+    next
+  end
+
   puts  "  - #{match[:date]}"
   print "    - Downloading..."
 
