@@ -3,7 +3,7 @@ require 'csv'
 
 # gems
 require 'zipruby'
-require 'aws'
+require 'aws-sdk'
 
 include AWS
 
